@@ -131,4 +131,51 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
         }
     }
 
+    // Auth!!
+    var username by mutableStateOf(repository.obtenirNom())
+        private set
+
+    var correu by mutableStateOf(repository.obtenirCorreu())
+        private set
+
+    var contrassenya by mutableStateOf(repository.obtenirPassword())
+        private set
+
+    fun registrarUsuari(usuari: String, pwd: String, email: String) : Boolean {
+
+        if (usuari.isEmpty() || pwd.isEmpty() || email.isEmpty()) return false
+
+        username = usuari
+        correu = email
+        contrassenya = pwd
+
+        repository.guardarNom(username)
+        repository.guardarPassword(contrassenya)
+        repository.guardarCorreu(correu)
+
+        return true
+    }
+
+    fun login(user: String, password: String, correuEnviat: String): Boolean {
+        val storedUsuari = repository.obtenirNom()
+        val storedPw = repository.obtenirPassword()
+        val storedCorreu = repository.obtenirCorreu()
+
+        if (correuEnviat == storedCorreu && password == storedPw && user == storedUsuari) {
+            username = storedUsuari
+            contrassenya = storedPw
+            correu = storedCorreu
+
+            return true
+        } else {
+            return false
+        }
+    }
+
+    fun logout() {
+        repository.clearUser()
+        username = ""
+        correu = ""
+        contrassenya = ""
+    }
 }
