@@ -24,8 +24,8 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
     val error = _error.asStateFlow()
 
     // Variables per a peticions POST
-    private val _missatgeResposta = MutableStateFlow<Boolean?>(null)
-    val missatgeResposta: StateFlow<Boolean?> = _missatgeResposta
+    val _missatgeResposta = MutableStateFlow<String?>(null)
+    val missatgeResposta: StateFlow<String?> = _missatgeResposta
 
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
@@ -112,7 +112,7 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
             val body = PostRequest(email, accio, apiKey)
             val resposta = RetrofitInstance.api.enviarRegistre(body)
 
-            _missatgeResposta.value = resposta.success
+            _missatgeResposta.value = resposta.message
 
             if (resposta.success) {
                 val currentList = _pandemics.value.toMutableList()
@@ -123,7 +123,7 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
             resposta.success
         } catch (e: Exception) {
             e.printStackTrace()
-            _missatgeResposta.value = false
+            _missatgeResposta.value = "Error:" + e.message
             false
         } finally {
             _loading.value = false

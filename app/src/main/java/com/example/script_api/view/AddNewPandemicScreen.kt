@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.script_api.model.Pandemic
@@ -33,6 +34,9 @@ fun AddNewPandemicScreen(
     var containmentMethod by remember { mutableStateOf("") }
     var mortalityScale by remember { mutableStateOf("") }
     var century by remember { mutableStateOf("") }
+
+    val missatge by viewModel.missatgeResposta.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
@@ -185,15 +189,51 @@ fun AddNewPandemicScreen(
                     )
                     scope.launch {
                         val success = viewModel.crearPandemia(accio = newPandemic)
-                        if (success) {
-                            navController.popBackStack()
-                        }
+                        showDialog = true
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Guardar nova pandèmia")
             }
+        }
+
+        if (showDialog && missatge != null) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = {
+                    Text(
+                        "Resultat",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                },
+                text = {
+                    Text(
+                        text = missatge!!,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                },
+                confirmButton = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                showDialog = false
+                                if (missatge == "Pandèmia afegida correctament") {
+                                    navController.popBackStack()
+                                }
+                            }
+                        ) {
+                            Text("D'acord")
+                        }
+                    }
+                }
+            )
         }
     }
 }
