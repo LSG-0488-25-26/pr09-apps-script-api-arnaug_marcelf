@@ -37,4 +37,41 @@ class SettingsRepository {
             else -> throw IllegalArgumentException("Unsupported type")
         }
     }
+
+    fun guardarNom(valor_nom: String) {
+        var key: String = "nom_usuari"
+        sharedPreferences.edit().putString(key, valor_nom).apply()
+    }
+
+    fun guardarCorreu(valorCorreu: String) {
+        var key: String = "correu_usuari"
+        sharedPreferences.edit().putString(key, valorCorreu).apply()
+    }
+
+    fun guardarPassword(valorPassword: String) {
+        val key = "pwd"
+        sharedPreferences.edit().putString(key, valorPassword).apply()
+    }
+
+    fun obtenirNom(): String {
+        var key: String = "nom_usuari"
+        return sharedPreferences.getString(key, "") ?: ""
+    }
+
+    fun obtenirCorreu(): String {
+        var key: String = "correu_usuari"
+        return sharedPreferences.getString(key, "") ?: ""
+    }
+
+    fun obtenirPassword(): String {
+        val key = "pwd"
+        return sharedPreferences.getString(key, "") ?: ""
+    }
+
+    fun clearUser() {
+        sharedPreferences.edit().remove("nom_usuari")
+            .remove("correu_usuari")
+            .remove("pwd")
+            .apply()
+    }
 }
