@@ -64,4 +64,4 @@ S’inclouen captures de les diferents pantalles de la app que mostren:
 
 ---
 També s’inclou un vídeo de demostració que mostra el flux complet: login, consulta de dades, inserció de noves plagues i actualització en Google Sheets.
-Link Video: 
+Link Video: https://www.youtube.com/watch?v=wLbWAZElNZM
