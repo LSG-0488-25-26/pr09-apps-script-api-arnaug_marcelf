@@ -27,7 +27,7 @@ fun MyBottomBar(
 
 
     NavigationBar(
-        containerColor = Color.DarkGray,
+        containerColor = Color(0xFF1F1F1F),
         contentColor = Color.White
     ) {
         val navBackEntry by navigationController.currentBackStackEntryAsState()
