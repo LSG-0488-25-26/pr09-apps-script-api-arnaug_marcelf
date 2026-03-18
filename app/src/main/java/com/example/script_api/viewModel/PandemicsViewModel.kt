@@ -102,12 +102,13 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
     }
 
     suspend fun crearPandemia(
-        email: String = "arnau.garcia.work@gmail.com",
         accio: Pandemic,
         apiKey: String = BuildConfig.API_KEY
     ): Boolean {
         _loading.value = true
         return try {
+            val email = repository.obtenirCorreu()
+
             val body = PostRequest(email, accio, apiKey)
             val resposta = RetrofitInstance.api.enviarRegistre(body)
 
@@ -123,14 +124,11 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
         } catch (e: Exception) {
             e.printStackTrace()
             _missatgeResposta.value = false
-
-            print(e)
             false
         } finally {
             _loading.value = false
         }
     }
-
     // Auth!!
     var username by mutableStateOf(repository.obtenirNom())
         private set
@@ -160,6 +158,8 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
         val storedUsuari = repository.obtenirNom()
         val storedPw = repository.obtenirPassword()
         val storedCorreu = repository.obtenirCorreu()
+
+        if (username.isBlank() || password.isBlank() || correuEnviat.isBlank()) return false
 
         if (correuEnviat == storedCorreu && password == storedPw && user == storedUsuari) {
             username = storedUsuari
