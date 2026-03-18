@@ -140,6 +140,7 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
         private set
 
     fun registrarUsuari(usuari: String, pwd: String, email: String) : Boolean {
+        repository.clearUser()
 
         if (usuari.isEmpty() || pwd.isEmpty() || email.isEmpty()) return false
 
@@ -159,7 +160,7 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
         val storedPw = repository.obtenirPassword()
         val storedCorreu = repository.obtenirCorreu()
 
-        if (username.isBlank() || password.isBlank() || correuEnviat.isBlank()) return false
+        if (user.isBlank() || password.isBlank() || correuEnviat.isBlank()) return false
 
         if (correuEnviat == storedCorreu && password == storedPw && user == storedUsuari) {
             username = storedUsuari
@@ -173,7 +174,6 @@ class PandemicsViewModel(private val repository: SettingsRepository): ViewModel(
     }
 
     fun logout() {
-        repository.clearUser()
         username = ""
         correu = ""
         contrassenya = ""
